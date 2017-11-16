@@ -1,0 +1,6 @@
+myREADME\.md
+site\.retry
+*.swp
+kubespray*
+deployments
+up\.sh
