@@ -1,0 +1,19 @@
+{
+  "applicationName": "Generic server instance",
+  "contactEmail": "gianni@ebi.ac.uk",
+  "about": "A base virtual machine instance",
+  "version": "0.6",
+  "cloudProviders": [
+    {
+     "cloudProvider": "OSTACK",
+     "path": "ostack",
+     "inputs":["machine_type"]
+    }
+  ],
+  "inputs": ["disk_image"], #deploy.sh inputs $TF_VAR_disk_image ...
+  "deploymentParameters": ["network_name",
+                           "floatingip_pool",
+                           "subnet_id"],
+
+  "outputs": ["external_ip"]
+}
