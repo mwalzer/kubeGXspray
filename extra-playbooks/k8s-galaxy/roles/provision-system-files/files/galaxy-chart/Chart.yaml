@@ -1,0 +1,6 @@
+name: galaxy
+version: 0.0.1
+description: K8s-Galaxy deployment
+sources:
+  - https://github.com/mwalzer/kubeGXspray
+  - https://github.com/pcm32/galaxy-helm-charts/tree/develop/galaxy

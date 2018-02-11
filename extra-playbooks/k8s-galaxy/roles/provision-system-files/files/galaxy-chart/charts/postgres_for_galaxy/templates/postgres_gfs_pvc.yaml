@@ -1,0 +1,15 @@
+{{ if and .Values.glusterfs.endpoint .Values.glusterfs.path }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Values.glusterfs.pvc_name }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 9Gi
+  selector:
+    matchLabels:
+      app: postgres-for-galaxy
+{{ end }}

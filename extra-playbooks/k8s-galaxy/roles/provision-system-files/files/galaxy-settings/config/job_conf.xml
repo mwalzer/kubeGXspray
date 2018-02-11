@@ -1,0 +1,569 @@
+<?xml version="1.0"?>
+<!-- A sample job config for sketching the k8s use case with shared fs -->
+<job_conf>
+    <plugins>
+        <plugin id="local" type="runner" load="galaxy.jobs.runners.local:LocalJobRunner" workers="4"/>
+        <plugin id="k8s" type="runner" load="galaxy.jobs.runners.kubernetes:KubernetesJobRunner">
+            <param id="k8s_use_service_account">true</param>
+            <param id="k8s_persistent_volume_claim_name">galaxy-pvc</param>
+            <!-- The following mount path needs to be the initial part of the "file_path" and "new_file_path" paths
+                             set in universe_wsgi.ini (or equivalent general galaxy config file).
+            -->
+            <param id="k8s_persistent_volume_claim_mount_path">/opt/galaxy_data</param>
+            <param id="k8s_namespace">default</param>
+            <param id="k8s_supplemental_group_id">0</param>
+            <param id="k8s_fs_group_id">0</param>
+            <param id="k8s_pull_policy">IfNotPresent</param>
+        <!-- Allows pods to retry up to this number of times, before marking the Job as failed -->
+        <param id="k8s_pod_retrials">1</param>
+        </plugin>
+    </plugins>
+    <handlers>
+        <handler id="main"/>
+    </handlers>
+    <destinations default="local">
+        <destination id="local" runner="local"/>	
+	<destination id="batman-container" runner="k8s">
+            <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">batman</param>
+            <param id="docker_tag_override">v1.2.12.0_cv1.0.65</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+        <destination id="w4m-biosigner-container" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">biosigner</param>
+            <param id="docker_tag_override">v2.2.7_cv1.1.12</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+	<destination id="camera-container" runner="k8s">
+            <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">camera</param>
+            <param id="docker_tag_override">v1.32.0_cv0.5.45</param>
+            <param id="max_pod_retrials">1</param>
+            <param id="docker_enabled">true</param>
+ 	</destination>
+	<destination id="iso2flux-container" runner="k8s">
+            <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">iso2flux</param>
+            <param id="docker_tag_override">v0.2_cv1.1.36</param>
+            <param id="max_pod_retrials">1</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+        <destination id="midcor-container" runner="k8s">
+            <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">midcor</param>
+            <param id="docker_tag_override">v1.0_cv1.0.40</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+        <destination id="isodyn-container" runner="k8s">
+            <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">isodyn</param>
+            <param id="docker_tag_override">v1.0_cv0.2.30</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+        <destination id="ramid-container" runner="k8s">
+            <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">ramid</param>
+            <param id="docker_tag_override">v1.0_cv1.0.14</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+        <destination id="papy-container" runner="k8s">
+            <param id="docker_enabled">true</param>
+        </destination>      
+	<destination id="w4m-mtbls-dwnld-container" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">mtbls-dwnld</param>
+            <param id="docker_tag_override">v2.0.5_cv1.2.16</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+	<destination id="w4m-univariate-container" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">univariate</param>
+            <param id="docker_tag_override">v2.2.3_cv1.2.28</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+	<destination id="w4m-multivariate-container" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">multivariate</param>
+            <param id="docker_tag_override">v2.3.10_cv1.1.18</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+	<destination id="w4m-lcmsmatching-container" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">lcmsmatching</param>
+            <param id="docker_tag_override">v3.1.6_cv1.3.61</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+	<destination id="msconvert2-container" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">pwiz</param>
+            <param id="docker_tag_override">latest</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+        <destination id="nmrmlconv-container" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">nmrmlconv</param>
+            <param id="docker_tag_override">v1.1b_cv0.4.46</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+        <destination id="rnmr1d-container" runner="k8s">
+            <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">rnmr1d</param>
+            <param id="docker_tag_override">v1.2.8_cv0.3.22</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+        <destination id="nmrglue-container" runner="k8s">
+            <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">nmrglue</param>
+            <param id="docker_tag_override">latest</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+	<destination id="soap-nmr-container" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">soap-nmr</param>
+            <param id="docker_tag_override">v1.0_cv0.4.1016</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+        <destination id="metfrag-cli-container" runner="k8s">
+            <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">metfrag-cli</param>
+            <param id="docker_tag_override">v2.4.2_cv0.3.24</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+	<destination id="xcms-container" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">xcms</param>
+            <param id="docker_tag_override">v1.52.0_cv0.5.58</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+        <destination id="mzml2isa-container" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">mzml2isa</param>
+            <param id="docker_tag_override">v0.4.28_cv0.2.23</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+        <destination id="nmrml2isa-container" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">nmrml2isa</param>
+            <param id="docker_tag_override">v0.3.0_cv0.1.10</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+	<destination id="mtbls-downloader-container" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">scp-aspera</param>
+            <param id="docker_tag_override">v3.5.4.102989-linux-64_cv0.2.9</param>
+            <param id="max_pod_retrials">1</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+        <destination id="mtbls-labs-uploader-container" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">mtbl-labs-uploader</param>
+            <param id="docker_tag_override">v0.1.0_cv0.3.11</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+        <destination id="container-metaboliteidconverter" runner="k8s">
+           <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+           <param id="docker_owner_override">phnmnl</param>
+           <param id="docker_image_override">metaboliteidconverter</param>
+           <param id="docker_tag_override">v0.5.1_cv1.1.28</param>
+           <param id="max_pod_retrials">3</param>
+           <param id="docker_enabled">true</param>
+        </destination>
+	<destination id="metabomatching-container" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">metabomatching</param>
+            <param id="docker_tag_override">v0.1.0_cv0.3.29</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+        <destination id="leidenuniv-ms-vfetc-container" runner="k8s">
+            <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">ms-vfetc</param>
+            <param id="docker_tag_override">v0.4_cv1.3.10</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+	<destination id="metfrag-cli-batch-container" runner="k8s">
+    	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+    	    <param id="docker_owner_override">phnmnl</param>
+    	    <param id="docker_image_override">metfrag-cli-batch</param>
+    	    <param id="docker_tag_override">v2.4.2_cv0.1.12</param>
+    	    <param id="max_pod_retrials">3</param>
+    	    <param id="docker_enabled">true</param>
+	</destination>
+	<destination id="container-mtblisa" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+	    <param id="docker_owner_override">phnmnl</param>
+	    <param id="docker_image_override">mtblisa</param>
+	    <param id="docker_tag_override">v0.8.0_cv0.5.44</param>
+	    <param id="max_pod_retrials">3</param>
+	    <param id="docker_enabled">true</param>
+	</destination>
+	<destination id="container-isatab-validator" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+	    <param id="docker_owner_override">phnmnl</param>
+	    <param id="docker_image_override">isatab-validator</param>
+	    <param id="docker_tag_override">v0.8.0_cv0.2.16</param>
+	    <param id="max_pod_retrials">3</param>
+	    <param id="docker_enabled">true</param>
+	</destination>
+	<destination id="container-isajson-validator" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+	    <param id="docker_owner_override">phnmnl</param>
+	    <param id="docker_image_override">isajson-validator</param>
+	    <param id="docker_tag_override">v0.8.0_cv0.2.26</param>
+	    <param id="max_pod_retrials">3</param>
+	    <param id="docker_enabled">true</param>
+	</destination>
+	<destination id="metfrag-vis-container" runner="k8s">
+	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+	    <param id="docker_owner_override">phnmnl</param>
+	    <param id="docker_image_override">metfrag-vis</param>
+	    <param id="docker_tag_override">v0.1_cv0.1.12</param>
+	    <param id="max_pod_retrials">3</param>
+	    <param id="docker_enabled">true</param>
+	</destination>
+	<destination id="container-escher-fluxomics" runner="k8s">
+            <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+	    <param id="docker_owner_override">phnmnl</param>
+	    <param id="docker_image_override">escher-fluxomics</param>
+	    <param id="docker_tag_override">v1.6.0-beta.4_cv1.0.9</param>
+	    <param id="max_pod_retrials">3</param>
+	    <param id="docker_enabled">true</param>
+  </destination>
+  <destination id="container-mw2isa" runner="k8s">
+            <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">mw2isa</param>
+            <param id="docker_tag_override">v0.5.0_cv0.1.20</param>
+            <param id="max_pod_retrials">1</param>
+            <param id="docker_enabled">true</param>
+  </destination>
+	<destination id="msnbase-container" runner="k8s">
+            <param id="docker_repo_override">docker-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">msnbase</param>
+	    <param id="docker_tag_override">v2.0.2_cv0.2.42</param>
+	    <param id="max_pod_retrials">1</param>
+	    <param id="docker_enabled">true</param>
+  </destination>
+        <destination id="container-isatab2json" runner="k8s">
+            <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+            <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">isatab2json</param>
+            <param id="docker_tag_override">v0.8.0_cv0.2.39</param>
+            <param id="max_pod_retrials">3</param>
+            <param id="docker_enabled">true</param>
+        </destination>
+       	<destination id="openms-container" runner="k8s">
+           <!-- <param id="docker_repo_override">quay.io</param>
+                            <param id="docker_owner_override">mwalzer</param>
+            <param id="docker_image_override">openms-allinclusive</param> 
+            <param id="docker_tag_override">2.1<param>-->
+            <param id="max_pod_retrials">1</param>
+            <param id="docker_enabled">true</param>
+	</destination>
+
+	<destination id="container-json2isatab" runner="k8s">
+           <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+           <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">json2isatab</param>
+           <param id="docker_tag_override">v0.8.0_cv0.2.26</param>
+           <param id="max_pod_retrials">3</param>
+           <param id="docker_enabled">true</param>
+         </destination>
+        <destination id="container-mtbls-factors-viz" runner="k8s">
+           <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
+           <param id="docker_owner_override">phnmnl</param>
+            <param id="docker_image_override">mtbls-factors-viz</param>
+           <param id="docker_tag_override">v0.4_cv0.3.11</param>
+           <param id="max_pod_retrials">3</param>
+           <param id="docker_enabled">true</param>
+        </destination>
+    </destinations>
+    <tools>
+        <!-- Tools can be configured to use specific destinations or handlers,
+                          identified by either the "id" or "tags" attribute.  If assigned to
+             a tag, a handler or destination that matches that tag will be
+             chosen at random.
+         -->
+        <tool id="BatchFeatureRemoval" destination="batchfeature-container"/>
+        <tool id="upps_blankfilter" destination="blankfilter-container"/>
+        <tool id="log2transformation" destination="log2transformation-container"/>
+	<!-- Fluxomics -->
+	<tool id="iso2flux" destination="iso2flux-container"/>
+        <tool id="midcor" destination="midcor-container"/>
+        <tool id="ramid" destination="ramid-container"/>
+        <tool id="isodyn" destination="isodyn-container"/>
+	<tool id="escher-fluxomics" destination="container-escher-fluxomics"/>
+	<!-- ICL -->
+        <tool id="batman-nmr" destination="batman-container"/>
+	<tool id="power-analysis" destination="papy-container"/>
+	<!-- W4M Sacurine -->
+        <tool id="mtbls-dwnld" destination="w4m-mtbls-dwnld-container"/>
+        <tool id="Univariate" destination="w4m-univariate-container"/>
+        <tool id="Multivariate" destination="w4m-multivariate-container"/>
+        <tool id="Biosigner" destination="w4m-biosigner-container"/>
+        <tool id="lcmsmatching" destination="w4m-lcmsmatching-container"/>
+        <tool id="msconvert2" destination="msconvert2-container"/>
+        <!-- new NMR -->
+        <tool id="mtbls_nmr_raw_dummy_importer" destination="nmrmlconv-container"/>
+        <tool id="nmrmlconv" destination="nmrmlconv-container"/>
+        <tool id="zip-nmrml-collection" destination="nmrmlconv-container"/>
+        <tool id="rnmr1d" destination="rnmr1d-container"/>
+        <tool id="rnmr1d-stacked-plot" destination="rnmr1d-container"/>
+        <!-- old NMR -->
+	<tool id="mtbls2nmrglue" destination="nmrglue-container"/>
+	<tool id="soap_process" destination="soap-nmr-container"/>
+	<tool id="soap_opls" destination="soap-nmr-container"/>
+    	<!-- other NMR -->
+	<tool id="save_chromatogram" destination="xcms-container"/>
+        <tool id="show_chromatogram" destination="xcms-container"/>
+        <tool id="mzml2isa" destination="mzml2isa-container"/>
+        <tool id="nmrml2isa" destination="nmrml2isa-container"/>
+        <tool id="mtbls-downloader" destination="mtbls-downloader-container"/>
+        <tool id="mtbls-labs-uploader" destination="mtbls-labs-uploader-container"/>
+        <tool id="metfragcli" destination="metfrag-cli-container"/>
+        <tool id="Metabolite_ID_Converter" destination="container-metaboliteidconverter" />
+        <tool id="metabomatching" destination="metabomatching-container"/>
+        <tool id="ms-vfetc" destination="leidenuniv-ms-vfetc-container"/>
+	<!-- new XCMS -->
+	<tool id="xcms-find-peaks" destination="xcms-container" />
+        <tool id="xcms-collect-peaks" destination="xcms-container" />
+        <tool id="xcms-group-peaks" destination="xcms-container" />
+        <tool id="xcms-correct-rt" destination="xcms-container" />
+        <tool id="xcms-fill-peaks" destination="xcms-container" />
+	<!-- CAMERA -->
+	<tool id="consensusXMLToXcms" destination="camera-container" />
+        <tool id="cameraToFeatureXML" destination="camera-container" />
+        <tool id="featureXMLToCAMERA" destination="camera-container" />
+	<tool id="featureXMLToXcms" destination="camera-container" />
+	<tool id="zip-collection" destination="camera-container"/>
+	<tool id="camera-annotate-peaks" destination="camera-container" />
+        <tool id="camera-group-fwhm" destination="camera-container" />
+        <tool id="camera-group-corr" destination="camera-container" />
+        <tool id="camera-find-isotopes" destination="camera-container" />
+        <tool id="camera-find-adducts" destination="camera-container" />
+	<tool id="xcmssplit" destination="xcms-container" />
+	<!-- OpenMS -->
+	<tool id="AccurateMassSearch" destination="openms-container"/> 
+	<tool id="AdditiveSeries" destination="openms-container"/>
+	<tool id="BaselineFilter" destination="openms-container"/>
+	<tool id="CompNovoCID" destination="openms-container"/>
+	<tool id="CompNovo" destination="openms-container"/>
+	<tool id="ConsensusID" destination="openms-container"/>
+	<tool id="ConsensusMapNormalizer" destination="openms-container"/>
+	<tool id="ConvertTraMLToTSV" destination="openms-container"/>
+	<tool id="ConvertTSVToTraML" destination="openms-container"/>
+	<tool id="CVInspector" destination="openms-container"/>
+	<tool id="DatabaseFilter" destination="openms-container"/>
+	<tool id="Decharger" destination="openms-container"/>
+	<tool id="DecoyDatabase" destination="openms-container"/>
+	<tool id="DeMeanderize" destination="openms-container"/>
+	<tool id="DigestorMotif" destination="openms-container"/>
+	<tool id="Digestor" destination="openms-container"/>
+	<tool id="DTAExtractor" destination="openms-container"/>
+	<tool id="EICExtractor" destination="openms-container"/>
+	<tool id="ERPairFinder" destination="openms-container"/>
+	<tool id="ExecutePipeline" destination="openms-container"/>
+	<tool id="ExternalCalibration" destination="openms-container"/>
+	<tool id="FalseDiscoveryRate" destination="openms-container"/>
+	<tool id="FeatureFinderCentroided" destination="openms-container"/>
+	<tool id="FeatureFinderIdentification" destination="openms-container"/>
+	<tool id="FeatureFinderIsotopeWavelet" destination="openms-container"/>
+	<tool id="FeatureFinderMetabo" destination="openms-container"/>
+	<tool id="FeatureFinderMRM" destination="openms-container"/>
+	<tool id="FeatureFinderMultiplex" destination="openms-container"/>
+	<tool id="FeatureFinderSuperHirn" destination="openms-container"/>
+	<tool id="FeatureLinkerLabeled" destination="openms-container"/>
+	<tool id="FeatureLinkerUnlabeledKD" destination="openms-container"/>
+	<tool id="FeatureLinkerUnlabeledQT" destination="openms-container"/>
+	<tool id="FeatureLinkerUnlabeled" destination="openms-container"/>
+	<tool id="FFEval" destination="openms-container"/>
+	<tool id="FidoAdapter" destination="openms-container"/>
+	<tool id="FileConverter" destination="openms-container"/>
+	<tool id="FileFilter" destination="openms-container"/>
+	<tool id="FileInfo" destination="openms-container"/>
+	<tool id="FileMerger" destination="openms-container"/>
+	<tool id="FuzzyDiff" destination="openms-container"/>
+	<tool id="HighResPrecursorMassCorrector" destination="openms-container"/>
+	<tool id="IDConflictResolver" destination="openms-container"/>
+	<tool id="IDDecoyProbability" destination="openms-container"/>
+	<tool id="IDEvaluator" destination="openms-container"/>
+	<tool id="IDExtractor" destination="openms-container"/>
+	<tool id="IDFileConverter" destination="openms-container"/>
+	<tool id="IDFilter" destination="openms-container"/>
+	<tool id="IDMapper" destination="openms-container"/>
+	<tool id="IDMassAccuracy" destination="openms-container"/>
+	<tool id="IDMerger" destination="openms-container"/>
+	<tool id="IDPosteriorErrorProbability" destination="openms-container"/>
+	<tool id="IDRipper" destination="openms-container"/>
+	<tool id="IDRTCalibration" destination="openms-container"/>
+	<tool id="IDScoreSwitcher" destination="openms-container"/>
+	<tool id="IDSplitter" destination="openms-container"/>
+	<tool id="ImageCreator" destination="openms-container"/>
+	<tool id="InclusionExclusionListCreator" destination="openms-container"/>
+	<tool id="INIUpdater" destination="openms-container"/>
+	<tool id="InspectAdapter" destination="openms-container"/>
+	<tool id="InternalCalibration" destination="openms-container"/>
+	<tool id="IsobaricAnalyzer" destination="openms-container"/>
+	<tool id="ITRAQAnalyzer" destination="openms-container"/>
+	<tool id="LabeledEval" destination="openms-container"/>
+	<tool id="LowMemPeakPickerHiRes_RandomAccess" destination="openms-container"/>
+	<tool id="LowMemPeakPickerHiRes" destination="openms-container"/>
+	<tool id="LuciphorAdapter" destination="openms-container"/>
+	<tool id="MapAlignerIdentification" destination="openms-container"/>
+	<tool id="MapAlignerPoseClustering" destination="openms-container"/>
+	<tool id="MapAlignerSpectrum" destination="openms-container"/>
+	<tool id="MapAlignmentEvaluation" destination="openms-container"/>
+	<tool id="MapNormalizer" destination="openms-container"/>
+	<tool id="MapRTTransformer" destination="openms-container"/>
+	<tool id="MapStatistics" destination="openms-container"/>
+	<tool id="MascotAdapterOnline" destination="openms-container"/>
+	<tool id="MascotAdapter" destination="openms-container"/>
+	<tool id="MassCalculator" destination="openms-container"/>
+	<tool id="MassTraceExtractor" destination="openms-container"/>
+	<tool id="MetaboliteSpectralMatcher" destination="openms-container"/>
+	<tool id="MetaProSIP" destination="openms-container"/>
+	<tool id="MRMMapper" destination="openms-container"/>
+	<tool id="MRMPairFinder" destination="openms-container"/>
+	<tool id="MRMTransitionGroupPicker" destination="openms-container"/>
+	<tool id="MSGFPlusAdapter" destination="openms-container"/>
+	<tool id="MSSimulator" destination="openms-container"/>
+	<tool id="MultiplexResolver" destination="openms-container"/>
+	<tool id="MyriMatchAdapter" destination="openms-container"/>
+	<tool id="MzMLSplitter" destination="openms-container"/>
+	<tool id="MzTabExporter" destination="openms-container"/>
+	<tool id="NoiseFilterGaussian" destination="openms-container"/>
+	<tool id="NoiseFilterSGolay" destination="openms-container"/>
+	<tool id="OMSSAAdapter" destination="openms-container"/>
+	<tool id="OpenSwathAnalyzer" destination="openms-container"/>
+	<tool id="OpenSwathAssayGenerator" destination="openms-container"/>
+	<tool id="OpenSwathChromatogramExtractor" destination="openms-container"/>
+	<tool id="OpenSwathConfidenceScoring" destination="openms-container"/>
+	<tool id="OpenSwathDecoyGenerator" destination="openms-container"/>
+	<tool id="OpenSwathDIAPreScoring" destination="openms-container"/>
+	<tool id="OpenSwathFeatureXMLToTSV" destination="openms-container"/>
+	<tool id="OpenSwathFileSplitter" destination="openms-container"/>
+	<tool id="OpenSwathMzMLFileCacher" destination="openms-container"/>
+	<tool id="OpenSwathRewriteToFeatureXML" destination="openms-container"/>
+	<tool id="OpenSwathRTNormalizer" destination="openms-container"/>
+	<tool id="OpenSwathWorkflow" destination="openms-container"/>
+	<tool id="PeakPickerHiRes" destination="openms-container"/>
+	<tool id="PeakPickerIterative" destination="openms-container"/>
+	<tool id="PeakPickerWavelet" destination="openms-container"/>
+	<tool id="PepNovoAdapter" destination="openms-container"/>
+	<tool id="PeptideIndexer" destination="openms-container"/>
+	<tool id="PhosphoScoring" destination="openms-container"/>
+	<tool id="PrecursorIonSelector" destination="openms-container"/>
+	<tool id="PrecursorMassCorrector" destination="openms-container"/>
+	<tool id="ProteinInference" destination="openms-container"/>
+	<tool id="ProteinQuantifier" destination="openms-container"/>
+	<tool id="ProteinResolver" destination="openms-container"/>
+	<tool id="PTModel" destination="openms-container"/>
+	<tool id="PTPredict" destination="openms-container"/>
+	<tool id="QCCalculator" destination="openms-container"/>
+	<tool id="QCEmbedder" destination="openms-container"/>
+	<tool id="QCExporter" destination="openms-container"/>
+	<tool id="QCExtractor" destination="openms-container"/>
+	<tool id="QCImporter" destination="openms-container"/>
+	<tool id="QCMerger" destination="openms-container"/>
+	<tool id="QCShrinker" destination="openms-container"/>
+	<tool id="Resampler" destination="openms-container"/>
+	<tool id="RNPxlSearch" destination="openms-container"/>
+	<tool id="RNPxlXICFilter" destination="openms-container"/>
+	<tool id="RNPxl" destination="openms-container"/>
+	<tool id="RTEvaluation" destination="openms-container"/>
+	<tool id="RTModel" destination="openms-container"/>
+	<tool id="RTPredict" destination="openms-container"/>
+	<tool id="SeedListGenerator" destination="openms-container"/>
+	<tool id="SemanticValidator" destination="openms-container"/>
+	<tool id="SequenceCoverageCalculator" destination="openms-container"/>
+	<tool id="SimpleSearchEngine" destination="openms-container"/>
+	<tool id="SpecLibCreator" destination="openms-container"/>
+	<tool id="SpecLibSearcher" destination="openms-container"/>
+	<tool id="SpectraFilterBernNorm" destination="openms-container"/>
+	<tool id="SpectraFilterMarkerMower" destination="openms-container"/>
+	<tool id="SpectraFilterNLargest" destination="openms-container"/>
+	<tool id="SpectraFilterNormalizer" destination="openms-container"/>
+	<tool id="SpectraFilterParentPeakMower" destination="openms-container"/>
+	<tool id="SpectraFilterScaler" destination="openms-container"/>
+	<tool id="SpectraFilterSqrtMower" destination="openms-container"/>
+	<tool id="SpectraFilterThresholdMower" destination="openms-container"/>
+	<tool id="SpectraFilterWindowMower" destination="openms-container"/>
+	<tool id="SpectraMerger" destination="openms-container"/>
+	<tool id="SpectraSTSearchAdapter" destination="openms-container"/>
+	<tool id="SvmTheoreticalSpectrumGeneratorTrainer" destination="openms-container"/>
+	<tool id="TextExporter" destination="openms-container"/>
+	<tool id="TICCalculator" destination="openms-container"/>
+	<tool id="TMTAnalyzer" destination="openms-container"/>
+	<tool id="TOFCalibration" destination="openms-container"/>
+	<tool id="toolExample" destination="openms-container"/>
+	<tool id="TopPerc" destination="openms-container"/>
+	<tool id="TransformationEvaluation" destination="openms-container"/>
+	<tool id="XMLValidator" destination="openms-container"/>
+	<tool id="XTandemAdapter" destination="openms-container"/>
+	<!-- MetFrag -->
+	<tool id="metfrag-cli-batch" destination="metfrag-cli-batch-container" />
+  <tool id="msnbase-read-msms" destination="msnbase-container" />
+  <tool id="map-msms2camera" destination="msnbase-container" />
+  <tool id="msms2metfrag" destination="msnbase-container" />
+	<tool id="metfrag-vis" destination="metfrag-vis-container" />
+	<!-- ISA related tools -->
+        <tool id="get_study" destination="container-mtblisa"/>
+        <tool id="get_study_json" destination="container-mtblisa"/>
+        <tool id="study_factor_values" destination="container-mtblisa"/>
+        <tool id="study_factors" destination="container-mtblisa"/>
+        <tool id="data_files" destination="container-mtblisa"/>
+	<tool id="factors_summary" destination="container-mtblisa"/>
+	<tool id="mtbls-factors-viz" destination="container-mtbls-factors-viz"/>
+        <tool id="isajson_validator" destination="container-isajson-validator"/>
+        <tool id="isatab_validator" destination="container-isatab-validator"/>
+        <tool id="isatab2json" destination="container-isatab2json"/>
+        <tool id="json2isatab" destination="container-json2isatab"/>
+        <tool id="mw2isa" destination="container-mw2isa"/>
+    </tools>
+</job_conf>

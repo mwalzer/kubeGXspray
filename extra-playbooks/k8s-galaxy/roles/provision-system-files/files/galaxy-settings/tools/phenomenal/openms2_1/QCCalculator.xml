@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--This is a configuration file for the integration of a tools into Galaxy (https://galaxyproject.org/). This file was automatically generated using CTD2Galaxy.-->
+<!--Proposed Tool Section: [Utilities]-->
+<tool id="QCCalculator" name="QCCalculator" version="2.1.0">
+  <description>Calculates basic quality parameters from MS experiments and subsequent analysis data as identification or feature detection.</description>
+        <requirements>
+           <container type="docker">quay.io/mwalzer/openms-allinclusive:2.1</container>
+         </requirements>
+  <macros>
+    <token name="@EXECUTABLE@">QCCalculator</token>
+    <import>macros.xml</import>
+  </macros>
+  <expand macro="stdio"/>
+  <expand macro="requirements"/>
+  <command>QCCalculator
+
+#if $param_in:
+  -in $param_in
+#end if
+#if $param_out:
+  -out $param_out
+#end if
+#if $param_id:
+  -id $param_id
+#end if
+#if $param_feature:
+  -feature $param_feature
+#end if
+#if $param_consensus:
+  -consensus $param_consensus
+#end if
+#if $param_remove_duplicate_features:
+  -remove_duplicate_features
+#end if
+#if $param_threads:
+  -threads $param_threads
+#end if
+#if $adv_opts.adv_opts_selector=='advanced':
+    #if $adv_opts.param_version:
+  -version     "$adv_opts.param_version"
+#end if
+    #if $adv_opts.param_log:
+  -log     "$adv_opts.param_log"
+#end if
+    #if $adv_opts.param_debug:
+  -debug $adv_opts.param_debug
+#end if
+    #if $adv_opts.param_no_progress:
+  -no_progress
+#end if
+    #if $adv_opts.param_force:
+  -force
+#end if
+    #if $adv_opts.param_test:
+  -test
+#end if
+#end if
+</command>
+  <inputs>
+    <param name="param_in" type="data" format="mzml" optional="False" label="raw data input file (this is relevant if you want to look at MS1, MS2 and precursor peak information)" help="(-in) "/>
+    <param name="param_id" type="data" format="idxml" optional="True" label="Input idXML file containing the identifications" help="(-id) Your identifications will be exported in an easy-to-read format"/>
+    <param name="param_feature" type="data" format="featurexml" optional="True" label="feature input file (this is relevant for most QC issues)" help="(-feature) "/>
+    <param name="param_consensus" type="data" format="consensusxml" optional="True" label="consensus input file (this is only used for charge state deconvoluted output" help="(-consensus) Use the consensusXML output form the DeCharger)"/>
+    <param name="param_remove_duplicate_features" display="radio" type="boolean" truevalue="-remove_duplicate_features" falsevalue="" checked="false" optional="True" label="This flag should be set, if you work with a set of merged features" help="(-remove_duplicate_features) "/>
+    <param name="param_threads" type="integer" value="1" label="Sets the number of threads allowed to be used by the TOPP tool" help="(-threads) "/>
+    <expand macro="advanced_options">
+      <param name="param_version" type="text" size="30" value="2.1.0" label="Version of the tool that generated this parameters file" help="(-version) ">
+        <sanitizer>
+          <valid initial="string.printable">
+            <remove value="'"/>
+            <remove value="&quot;"/>
+          </valid>
+        </sanitizer>
+      </param>
+      <param name="param_log" type="text" size="30" label="Name of log file (created only when specified)" help="(-log) ">
+        <sanitizer>
+          <valid initial="string.printable">
+            <remove value="'"/>
+            <remove value="&quot;"/>
+          </valid>
+        </sanitizer>
+      </param>
+      <param name="param_debug" type="integer" value="0" label="Sets the debug level" help="(-debug) "/>
+      <param name="param_no_progress" display="radio" type="boolean" truevalue="-no_progress" falsevalue="" checked="false" optional="True" label="Disables progress logging to command line" help="(-no_progress) "/>
+      <param name="param_force" display="radio" type="boolean" truevalue="-force" falsevalue="" checked="false" optional="True" label="Overwrite tool specific checks" help="(-force) "/>
+      <param name="param_test" display="radio" type="boolean" truevalue="-test" falsevalue="" checked="false" optional="True" label="Enables the test mode (needed for internal use only)" help="(-test) "/>
+    </expand>
+  </inputs>
+  <outputs>
+    <data name="param_out" format="qcml"/>
+  </outputs>
+  <help>Calculates basic quality parameters from MS experiments and subsequent analysis data as identification or feature detection.
+
+
+For more information, visit http://ftp.mi.fu-berlin.de/OpenMS/release-documentation/html/UTILS_QCCalculator.html</help>
+</tool>

@@ -1,0 +1,16 @@
+<tool id="FileInfoHelptext" name="justanothername" version="0.1.1">
+    <description>Just outputs the help text of OpenMS FileInfo.</description>
+    <requirements>
+        <container type="docker">quay.io/mwalzer/openms-allinclusive</container>
+    </requirements>
+     <command>FileInfo --help > $output1</command>
+    <inputs>
+        <param name="input1" type="data" format="txt" multiple="true" label="dummy" />
+    </inputs>
+    <outputs>
+        <data name="output1" format="text" label="test output"/>
+    </outputs>
+    <help><![CDATA[
+	Just outputs the help text of OpenMS FileInfo.
+    ]]></help>
+</tool>

@@ -1,0 +1,20 @@
+{{ if and .Values.glusterfs.endpoint .Values.glusterfs.path }} 
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.glusterfs.pv_name }}
+  labels:
+    app: postgres-for-galaxy
+spec:
+  capacity:
+      storage: "10Gi"
+  accessModes:
+    - ReadWriteMany
+  mountOptions:
+    - volume-name=replicate
+  glusterfs:
+    endpoints: {{ .Values.glusterfs.endpoint }}
+    path: {{ .Values.glusterfs.path }}
+    readOnly: false
+  persistentVolumeReclaimPolicy: Retain
+{{ end }}

@@ -28,8 +28,6 @@ echo Setting up Terraform creds && \
 
 export KARGO_TERRAFORM_FOLDER=$PORTAL_APP_REPO_FOLDER'/kubespray/contrib/terraform/openstack'
 
-
-
 cd $PORTAL_APP_REPO_FOLDER'/kubespray'
 terraform apply --state=$PORTAL_DEPLOYMENTS_ROOT'/'$PORTAL_DEPLOYMENT_REFERENCE'/terraform.tfstate' $KARGO_TERRAFORM_FOLDER
 
@@ -37,7 +35,7 @@ cp contrib/terraform/terraform.py $PORTAL_DEPLOYMENTS_ROOT'/'$PORTAL_DEPLOYMENT_
 cp -r inventory/group_vars $PORTAL_DEPLOYMENTS_ROOT'/'$PORTAL_DEPLOYMENT_REFERENCE'/'
 
 # Provision kubespray
-ansible-playbook -b --become-user=root -i $PORTAL_DEPLOYMENTS_ROOT'/'$PORTAL_DEPLOYMENT_REFERENCE'/hosts' cluster.yml \
+ansible-playbook --flush-cache -b --become-user=root -i $PORTAL_DEPLOYMENTS_ROOT'/'$PORTAL_DEPLOYMENT_REFERENCE'/hosts' cluster.yml \
 	--key-file "$PRIVATE_KEY" \
 	-e bootstrap_os=ubuntu \
 	-e host_key_checking=false \
@@ -52,15 +50,23 @@ ansible-playbook -b --become-user=root -i $PORTAL_DEPLOYMENTS_ROOT'/'$PORTAL_DEP
 
 
 # Provision glusterfs
-ansible-playbook -b --become-user=root -i $PORTAL_DEPLOYMENTS_ROOT'/'$PORTAL_DEPLOYMENT_REFERENCE'/hosts' ./contrib/network-storage/glusterfs/glusterfs.yml \
+ansible-playbook -b --become-user=root -i $PORTAL_DEPLOYMENTS_ROOT'/'$PORTAL_DEPLOYMENT_REFERENCE'/hosts' \
+	./contrib/network-storage/glusterfs/glusterfs.yml \
 	--key-file "$PRIVATE_KEY" \
 	-e host_key_checking=false \
 	-e bootstrap_os=ubuntu
 
-
 # Set permissive access control
-ansible-playbook -b --become-user=root -i $PORTAL_DEPLOYMENTS_ROOT'/'$PORTAL_DEPLOYMENT_REFERENCE'/hosts' ../extra-playbooks/rbac/rbac.yml \
-	--key-file "$PRIVATE_KEY" \
+ansible-playbook -b --become-user=root -i $PORTAL_DEPLOYMENTS_ROOT'/'$PORTAL_DEPLOYMENT_REFERENCE'/hosts' \
+	../extra-playbooks/rbac/rbac.yml \
+	--key-file "$PRIVATE_KEY"
+
+# Start Galaxy
+ansible-playbook -b --become-user=root -i $PORTAL_DEPLOYMENTS_ROOT'/'$PORTAL_DEPLOYMENT_REFERENCE'/hosts' \
+	../extra-playbooks/k8s-galaxy/k8s-galaxy.yml \
+	--key-file "$PRIVATE_KEY"
+
+# Start BioBlend pod, provision galaxy dataset, start workflow
 
 # We need to copy the no-ip yaml files for ansible to somewhere sensible
 #terraform apply -state=contrib/terraform/openstack/terraform.tfstate -var-file=*.tfvars contrib/terraform/openstack

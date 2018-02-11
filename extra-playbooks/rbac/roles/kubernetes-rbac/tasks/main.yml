@@ -5,4 +5,9 @@
     --user=admin \
     --user=kubelet \
     --group=system:serviceaccounts
-
+  register: crbpermissive
+  #ignore_errors: (crbpermissive.stderr.find("AlreadyExists") != -1) and (crbpermissive.stderr.find("already exists") != -1) 
+  ignore_errors: true
+  
+#- name: kubectl apply dashboard
+#  command: kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/master/src/deploy/recommended/kubernetes-dashboard.yaml

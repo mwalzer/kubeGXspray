@@ -1,0 +1,101 @@
+# Default values for galaxy-chart.
+# This is a YAML-formatted file.
+# Declare name/value pairs to be passed into your templates.
+# name: value
+
+# To run within minikube using a created persistent volume on /data
+#
+# helm install --set pv_minikube="yes"
+#
+# To set postgresql password for the galaxy user
+# (note that if the deployment will use an existing postgre database folder, the same password needs to be used as originally).
+#
+# helm install --set postgres.db_password="new-password"
+#
+# For using an ingress to galaxy.mydomain.dev use
+#
+# helm install --set use_ingress="yes",domain="mydomain.dev"
+#
+# For using an ingress to galaxy.mydomain.dev using an external ingress controller, use:
+#
+# helm install --set use_ingress="yes",domain="mydomain.dev",external_ingress_controller="yes"
+#
+# For setting the admin user
+#
+# helm install --set galaxy_admin_email="user@host.domain",galaxy_admin_password="mypasswd",galaxy_api_key="aksjdhas"
+#
+# To avoid creating the PVC (because is already there or created by another chart
+#
+# helm install --set galaxy_create_pvc=false
+#
+# To avoid altogether using a PVC for postgres (files are written inside the container, pod dies, Galaxy state is lost)
+#
+# helm install --set postgres.postgres_pvc=false
+#
+# To set a new destination for the tools directory. This is by default set to a location inside the PVC
+#
+# helm install --set galaxy_tools_dest="/path/to/tools"
+#
+# Set up supplementalGroups to GID 1000 for Kubernetes pods to write on privileged NFS. Needs to be an integer.
+#
+# helm install --set k8s_supp_group=1000
+#
+# Set up fsGroups to GID 2300 for Kubernetes to write on privileged file system. Needs to be an integer
+#
+# helm install --set ks8_fs_group=2300
+#
+# For development mode, having config, tools and tools galaxy folders on <your_folder>, run with
+# helm install --set development_folder=<your_folder> galaxy-simple
+#
+# For setting up an SMTP server for sending mail
+#
+# helm install --set smtp_server="your-server:port",smtp_username="your-user",smtp_password="your-pass",email_from="email-from@smtp-domain",instance_resource_url="https://your-galaxy-url",smtp_ssl=True
+#
+# To setup a subpath for postgres within the PVC
+#
+# helm install --set postgres_for_galaxy.subpath="otherDirectory/inside/pvc" ....
+#
+# Above instructions can be used together, just concatenate with a comma.
+#
+#
+# Galaxy RC
+galaxy_image_registry: "container-registry.phenomenal-h2020.eu/"
+galaxy_image: "phnmnl/galaxy-k8s-runtime"
+galaxy_image_tag: ":latest"
+galaxy_pull_policy: "IfNotPresent"
+galaxy_pvc: "galaxy-pvc"
+galaxy_create_pvc: true
+galaxy_pvc_capacity: "29Gi"
+galaxy_metadata_name: "galaxy-k8s"
+galaxy_label_app: "galaxy-k8s"
+galaxy_internal_port: 8080
+galaxy_node_port_exposed: 30700
+galaxy_admin_email: ""
+galaxy_admin_username: "admin"
+galaxy_admin_password: ""
+galaxy_api_key: ""
+galaxy_tools_dest: "/opt/galaxy_data"
+galaxy_backend_postgres: false
+
+legacy:
+   pre_k8s_16: false
+rbac_needed: false
+
+k8s_supp_groups: ""
+
+galaxy:
+  config:
+    auto_migrate: false
+
+# tool2container_mapping_file: "phenomenal_tools2container.yaml"
+
+# Ingress
+domain: "mydomain.dev"
+hostname: "galaxy"
+
+postgres_for_galaxy:
+        db_password: "mypassword"
+        postgres_pvc: "galaxy-pvc"
+        subpath: ""
+
+smtp_ssl: "False"
