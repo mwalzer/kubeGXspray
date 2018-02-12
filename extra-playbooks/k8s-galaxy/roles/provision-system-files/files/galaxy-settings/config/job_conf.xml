@@ -22,7 +22,7 @@
         <handler id="main"/>
     </handlers>
     <destinations default="local">
-        <destination id="local" runner="local"/>	
+        <destination id="local" runner="local"/>
 	<destination id="batman-container" runner="k8s">
             <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
             <param id="docker_owner_override">phnmnl</param>
@@ -81,7 +81,7 @@
         </destination>
         <destination id="papy-container" runner="k8s">
             <param id="docker_enabled">true</param>
-        </destination>      
+        </destination>
 	<destination id="w4m-mtbls-dwnld-container" runner="k8s">
 	    <param id="docker_repo_override">container-registry.phenomenal-h2020.eu</param>
             <param id="docker_owner_override">phnmnl</param>
@@ -298,10 +298,10 @@
             <param id="max_pod_retrials">3</param>
             <param id="docker_enabled">true</param>
         </destination>
-       	<destination id="openms-container" runner="k8s">
+	<destination id="openms-container" runner="k8s">
            <!-- <param id="docker_repo_override">quay.io</param>
-                            <param id="docker_owner_override">mwalzer</param>
-            <param id="docker_image_override">openms-allinclusive</param> 
+            <param id="docker_owner_override">mwalzer</param>
+            <param id="docker_image_override">openms-allinclusive</param>
             <param id="docker_tag_override">2.1<param>-->
             <param id="max_pod_retrials">1</param>
             <param id="docker_enabled">true</param>
@@ -389,7 +389,7 @@
         <tool id="camera-find-adducts" destination="camera-container" />
 	<tool id="xcmssplit" destination="xcms-container" />
 	<!-- OpenMS -->
-	<tool id="AccurateMassSearch" destination="openms-container"/> 
+	<tool id="AccurateMassSearch" destination="openms-container"/>
 	<tool id="AdditiveSeries" destination="openms-container"/>
 	<tool id="BaselineFilter" destination="openms-container"/>
 	<tool id="CompNovoCID" destination="openms-container"/>
