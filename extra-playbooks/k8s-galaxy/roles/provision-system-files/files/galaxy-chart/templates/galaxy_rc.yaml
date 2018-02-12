@@ -34,9 +34,9 @@ spec:
         - name: galaxy-settings-provisioner
           # TODO this means loading files only if .Values.galaxy_backend_postgres
           #docker run -v /tmp/:/workdir/:rw jgsqware/svn-client export https://github.com/mwalzer/k8s-galaxy-ansible/trunk/dev /workdir/customchart
-          image: jgsqware/svn-client
+          image: mwalzer/alpine-svn
           imagePullPolicy: IfNotPresent
-          command: [ "export https://github.com/mwalzer/kubeGXspray/trunk/extra-playbooks/k8s-galaxy/roles/provision-system-files/files/galaxy-settings /workdir/customsettings" ]
+          command: [ "svn export https://github.com/mwalzer/kubeGXspray/trunk/extra-playbooks/k8s-galaxy/roles/provision-system-files/files/galaxy-settings /workdir/customsettings" ]
           volumeMounts:
             - mountPath: "/workdir"
               name: galaxy-pvc
