@@ -10,6 +10,7 @@
                              set in universe_wsgi.ini (or equivalent general galaxy config file).
             -->
             <param id="k8s_persistent_volume_claim_mount_path">/opt/galaxy_data</param>
+            <!--<param id="k8s_persistent_volume_claim_mount_path">/opt/galaxy_data/cache</param>-->
             <param id="k8s_namespace">default</param>
             <param id="k8s_supplemental_group_id">0</param>
             <param id="k8s_fs_group_id">0</param>

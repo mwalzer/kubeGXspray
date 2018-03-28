@@ -6,14 +6,14 @@
 * trigger k8s-galaxy workflow execution
 
 after checkout and getting the latest kubespray, recreating some symlinks might be necessary:
-* ./<latest kubespray>/extra_playbooks/roles -> ../roles
-* ./<latest kubespray>/extra_playbooks/inventory -> ../inventory
-* ./<latest kubespray>/contrib/terraform/group_vars -> ../../inventory/group_vars
-* ./<latest kubespray>/contrib/terraform/openstack/hosts -> ../terraform.py
-* ./<latest kubespray>/contrib/terraform/openstack/group_vars -> ../../../inventory/group_vars
-* ./<latest kubespray>/contrib/network-storage/glusterfs/group_vars -> ../../../inventory/group_vars
-* ./<latest kubespray>/contrib/network-storage/glusterfs/roles/bootstrap-os -> ../../../../roles/bootstrap-os
-* ./kubespray -> <latest kubespray>
+* `./<latest kubespray>/extra_playbooks/roles -> ../roles`
+* `./<latest kubespray>/extra_playbooks/inventory -> ../inventory`
+* `./<latest kubespray>/contrib/terraform/group_vars -> ../../inventory/group_vars`
+* `./<latest kubespray>/contrib/terraform/openstack/hosts -> ../terraform.py`
+* `./<latest kubespray>/contrib/terraform/openstack/group_vars -> ../../../inventory/group_vars`
+* `./<latest kubespray>/contrib/network-storage/glusterfs/group_vars -> ../../../inventory/group_vars`
+* `./<latest kubespray>/contrib/network-storage/glusterfs/roles/bootstrap-os -> ../../../../roles/bootstrap-os`
+* `./kubespray -> <latest kubespray>`
 
 
 ## troubleshooting
@@ -86,3 +86,22 @@ use
 ``` bash
 terraform destroy --force --input=false --state=deployments/deployment-ref-ubuntu/terraform.tfstate
 ```
+
+### deployment failure due to unreachable hosts
+check ssh host file first, then it still might be due to TSI 'live migrations' (moving instances from one openstack host to the other).
+kubespraytest-k8s-master-1 : ok=1    changed=0    unreachable=1    failed=0   
+kubespraytest-k8s-node-nf-1 : ok=1    changed=0    unreachable=1    failed=0   
+kubespraytest-k8s-node-nf-2 : ok=1    changed=0    unreachable=1    failed=0
+
+
+### redeploy galaxy for development purposes (and there was a previous deployment)
+sudo helm delete $(sudo helm list | awk 'NR==2 {print $1;}')
+kubectl delete configmaps db-connection
+kubectl delete pv glusterfs
+kubectl delete secret galaxy-postgres-secret
+
+./reup_g.sh
+
+### inspect init containers
+kubectl get pods
+kubectl logs galaxy-k8s-lt2cn -c galaxy-settings-provisioner
