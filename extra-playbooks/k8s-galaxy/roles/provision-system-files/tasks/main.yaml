@@ -15,8 +15,8 @@
 - name: deploy k8s galaxy (+add_foreign_repos)
   command: "{{ item }}"
   with_items:
-    - helm repo add galaxy-helm-repo https://pcm32.github.io/galaxy-helm-charts
-    - helm install /root/.helm/galaxy-chart --set galaxy_backend_postgres=true,cluster_dev=true,galaxy_create_pvc=true,galaxy_image_tag=":rc_v17.05-pheno_cv1.2.98"
+    #- helm repo add galaxy-helm-repo https://pcm32.github.io/galaxy-helm-charts
+    - helm install /root/.helm/galaxy-chart --set galaxy_backend_postgres=true,cluster_dev=true,galaxy_create_pvc=true,galaxy_image_tag=":rc_v17.05-pheno_cv1.2.98,objectstore_token={{objectstore_token}}"
     #- helm install /tmp/galaxy-chart --set galaxy_backend_postgres=true,cluster_dev=true,galaxy_create_pvc=true,galaxy_image_tag=":rc_v17.05-pheno_cv1.2.98"
     #- helm install --set cluster_dev=true,galaxy_create_pvc=false,galaxy_dev_config=galaxy-dev-config,galaxy_dev_tools=galaxy-dev-tools,galaxy_image_tag=":rc_v17.05-pheno_cv1.2.98" /tmp/galaxy-chart/galaxy-simple
     #helm install galaxy-helm-repo/galaxy --set galaxy_backend_postgres=true,galaxy_create_pvc=true,galaxy_pvc_capacity="29Gi"

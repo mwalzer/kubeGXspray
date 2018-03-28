@@ -37,7 +37,7 @@ spec:
           image: mwalzer/alpine-svn
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh"]
-          args: ["-c", "svn export https://github.com/mwalzer/kubeGXspray/trunk/extra-playbooks/k8s-galaxy/roles/provision-system-files/files/galaxy-settings /workdir/customsettings" ]
+          args: ["-c", "svn export https://github.com/mwalzer/kubeGXspray/trunk/extra-playbooks/k8s-galaxy/roles/provision-system-files/files/galaxy-settings /workdir/customsettings  && sed -i 's/<your key>/{{.Values.objectstore_token}}/g' galaxy.ini" ]
           volumeMounts:
             - mountPath: "/workdir"
               name: galaxy-pvc
