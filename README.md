@@ -2,7 +2,7 @@
 
 * get latest kubespray
 * deploy
-* start k8s-galaxy 
+* start k8s-galaxy
 * trigger k8s-galaxy workflow execution
 
 after checkout and getting the latest kubespray, recreating some symlinks might be necessary:
@@ -28,6 +28,7 @@ also cleanse known_hosts from bastion public_ip
 ostack/deploy.sh
 ```
 before that, except for sourcing the openstack credentials, the following exports might be needed:
+```
 # set environment variables used by scripts in cloud-deploy/
 export PUBLIC_KEY=""
 export PRIVATE_KEY=""
@@ -56,7 +57,7 @@ export TF_VAR_image="Ubuntu16.04"
 export TF_VAR_ssh_user="ubuntu"
 #export TF_VAR_ssh_user="centos"
 #export TF_VAR_flavor_k8s_node="e9ca7478-7957-4237-b3d0-d4767e1de65f" #ext5
-export TF_VAR_flavor_k8s_node="11" 
+export TF_VAR_flavor_k8s_node="11"
 #export TF_VAR_flavor_etcd="12"
 #export TF_VAR_flavor_k8s_master="91ba172b-cb4c-453c-b7fc-56cb79c78968" #ext5
 export TF_VAR_flavor_k8s_master="11"
@@ -73,10 +74,15 @@ export TF_VAR_ssh_user_gfs="ubuntu"
 
 export KUBELET_DEPLOYMENT_TYPE="host"
 export KUBE_VERSION="v1.8.2"
+```
 
-
-## to destroy the deployment 
-use 
+### adding an object store secret to be passed on to helm means adding extra-vars to the in deploy.sh
+``` bash
+ansible-playbook ... --extra-vars "objectstore_token=asd123lkj890dfg..."
+```
+this can then be consumed by helm in tasks/main.yaml with_items: jinja2 nomenclature "...,objectstore_token={{objectstore_token}}"
+## to destroy the deployment
+use
 ``` bash
 terraform destroy --force --input=false --state=deployments/deployment-ref-ubuntu/terraform.tfstate
 ```
