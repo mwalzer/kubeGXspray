@@ -88,18 +88,20 @@ terraform destroy --force --input=false --state=deployments/deployment-ref-ubunt
 ```
 
 ### deployment failure due to unreachable hosts
-check ssh host file first, then it still might be due to TSI 'live migrations' (moving instances from one openstack host to the other).
+check ssh known_hosts first (`ssh-keygen -R 193.62.52.158`), then it still might be due to TSI 'live migrations' (moving instances from one openstack host to the other).
 kubespraytest-k8s-master-1 : ok=1    changed=0    unreachable=1    failed=0   
 kubespraytest-k8s-node-nf-1 : ok=1    changed=0    unreachable=1    failed=0   
 kubespraytest-k8s-node-nf-2 : ok=1    changed=0    unreachable=1    failed=0
 
 
 ### redeploy galaxy for development purposes (and there was a previous deployment)
+In master node
+```
 sudo helm delete $(sudo helm list | awk 'NR==2 {print $1;}')
 kubectl delete configmaps db-connection
 kubectl delete pv glusterfs
 kubectl delete secret galaxy-postgres-secret
-
+```
 ./reup_g.sh
 
 ### inspect init containers
