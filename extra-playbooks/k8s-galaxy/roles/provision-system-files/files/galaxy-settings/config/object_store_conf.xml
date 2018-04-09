@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<object_store type="hierarchical">
+    <backends>
+        <!--  Sample S3 Object Store  -->
+        <object_store type="swift">
+             <auth access_key="safeword_key_secret" secret_key="safeword_key_id" />
+             <bucket name="safeword_bucket_name" use_reduced_redundancy="False" />
+             <cache path="/opt/galaxy_data/cache" size="70" />
+             <extra_dir type="job_work" path="/opt/galaxy_data/database/job_working_directory_s3"/>
+             <extra_dir type="temp" path="/opt/galaxy_data/database/tmp_s3"/>
+	     <connection host="https://s3.embassy.ebi.ac.uk" port="3128" is_secure="True" conn_path="" multipart="True"/>
+        </object_store>
+        <!-- probably leave out port out as none, same for conn_path
+	https://github.com/galaxyproject/galaxy/blob/7c1afa8f16b68fcb8948c760862d4beb68187118/lib/galaxy/objectstore/s3.py
+	another hack to use is probably use swift with S3 cred and url, as boto s3 object creation seems to be the same
+	type="swift"
+	      -->
+        <!--  Sample Swift Object Store
+        <object_store type="swift">
+            <auth access_key="...." secret_key="....." />
+            <bucket name="unique_bucket_name" use_reduced_redundancy="False" max_chunk_size="250"/>
+            <connection host="" port="" is_secure="" conn_path="" multipart="True"/>
+            <cache path="database/object_store_cache" size="1000" />
+            <extra_dir type="job_work" path="database/job_working_directory_swift"/>
+            <extra_dir type="temp" path="database/tmp_swift"/>
+        </object_store>
+        -->
+    </backends>
+</object_store>

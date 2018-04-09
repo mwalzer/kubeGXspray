@@ -37,7 +37,7 @@ spec:
           image: mwalzer/alpine-svn
           imagePullPolicy: IfNotPresent
           command: ["/bin/sh"]
-          args: ["-c", "svn export https://github.com/mwalzer/kubeGXspray/trunk/extra-playbooks/k8s-galaxy/roles/provision-system-files/files/galaxy-settings /workdir/customsettings --force && echo {{.Values.objectstore_key_id}} && sed -i 's/safeword_key_id/{{.Values.objectstore_key_id}}/g' /workdir/customsettings/config/galaxy.ini && echo {{.Values.objectstore_access_key}} && sed -i 's/safeword_key_secret/{{.Values.objectstore_access_key}}/g' /workdir/customsettings/config/galaxy.ini && echo {{.Values.objectstore_bucket_name}} && sed -i 's;safeword_bucket_name;{{.Values.objectstore_bucket_name}};g' /workdir/customsettings/config/galaxy.ini" ]
+          args: ["-c", "svn export https://github.com/mwalzer/kubeGXspray/trunk/extra-playbooks/k8s-galaxy/roles/provision-system-files/files/galaxy-settings /workdir/customsettings --force && echo {{.Values.objectstore_key_id}} && sed -i 's/safeword_key_id/{{.Values.objectstore_key_id}}/g' /workdir/customsettings/config/object_store_conf.xml && echo {{.Values.objectstore_access_key}} && sed -i 's/safeword_key_secret/{{.Values.objectstore_access_key}}/g' /workdir/customsettings/config/object_store_conf.xml && echo {{.Values.objectstore_bucket_name}} && sed -i 's;safeword_bucket_name;{{.Values.objectstore_bucket_name}};g' /workdir/customsettings/config/object_store_conf.xml" ]
           volumeMounts:
             - mountPath: "/workdir"
               name: galaxy-pvc
