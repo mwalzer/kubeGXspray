@@ -121,7 +121,7 @@ spec:
             - name: "GALAXY_SMTP_SSL"
               value: "{{.Values.smtp_ssl}}"
 {{ end }}
-        command: ["/bin/bash","-c","{{ if not .Values.galaxy_backend_postgres }}mkdir -p /opt/galaxy_data/database-sqlite && {{ end }}{{ if .Values.cluster_dev }}mkdir -p /opt/galaxy_data/cache && cp /opt/galaxy_data/customsettings/config/galaxy.ini /galaxy/config/galaxy.ini && cp /opt/galaxy_data/customsettings/config/job_conf.xml /galaxy/config/job_conf.xml && cp /opt/galaxy_data/customsettings/config/tool_conf.xml /galaxy/config/tool_conf.xml && cp -r /opt/galaxy_data/customsettings/tools/openms2_1 /galaxy/tools/openms2_1 && {{ end }}./ansible/run_galaxy_config.sh > config_db.log && ./run.sh --daemon && tail -f paster.log"]
+        command: ["/bin/bash","-c","{{ if not .Values.galaxy_backend_postgres }}mkdir -p /opt/galaxy_data/database-sqlite && {{ end }}{{ if .Values.cluster_dev }}mkdir -p /opt/galaxy_data/cache && cp /opt/galaxy_data/customsettings/config/galaxy.ini /galaxy/config/galaxy.ini && cp /opt/galaxy_data/customsettings/config/object_store_conf.xml /galaxy/config/object_store_conf.xml && cp /opt/galaxy_data/customsettings/config/job_conf.xml /galaxy/config/job_conf.xml && cp /opt/galaxy_data/customsettings/config/tool_conf.xml /galaxy/config/tool_conf.xml && cp -r /opt/galaxy_data/customsettings/tools/openms2_1 /galaxy/tools/openms2_1 && {{ end }}./ansible/run_galaxy_config.sh > config_db.log && ./run.sh --daemon && tail -f paster.log"]
 
         lifecycle:
           preStop:

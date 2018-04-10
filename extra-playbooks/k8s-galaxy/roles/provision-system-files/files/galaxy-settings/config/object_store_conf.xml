@@ -6,8 +6,8 @@
              <auth access_key="safeword_key_secret" secret_key="safeword_key_id" />
              <bucket name="safeword_bucket_name" use_reduced_redundancy="False" />
              <cache path="/opt/galaxy_data/cache" size="70" />
-             <extra_dir type="job_work" path="/opt/galaxy_data/database/job_working_directory_s3"/>
-             <extra_dir type="temp" path="/opt/galaxy_data/database/tmp_s3"/>
+             <extra_dir type="job_work" path="/opt/galaxy_data/database/job_working_directory"/>
+             <extra_dir type="temp" path="/opt/galaxy_data/tmp"/>
 	     <connection host="https://s3.embassy.ebi.ac.uk" port="3128" is_secure="True" conn_path="" multipart="True"/>
         </object_store>
         <!-- probably leave out port out as none, same for conn_path

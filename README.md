@@ -107,3 +107,9 @@ kubectl delete secret galaxy-postgres-secret
 ### inspect init containers
 kubectl get pods
 kubectl logs galaxy-k8s-lt2cn -c galaxy-settings-provisioner
+
+### get the env
+```
+kubectl proxy
+ssh -L 30700:localhost:30700 ubuntu@193.62.52.182
+```
