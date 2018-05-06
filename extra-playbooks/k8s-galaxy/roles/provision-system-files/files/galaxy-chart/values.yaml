@@ -59,9 +59,9 @@
 #
 #
 # Galaxy RC
-galaxy_image_registry: "container-registry.phenomenal-h2020.eu/"
-galaxy_image: "phnmnl/galaxy-k8s-runtime"
-galaxy_image_tag: ":latest"
+galaxy_image_registry: ""
+galaxy_image: "mwalzer/galaxy-k8s"
+galaxy_image_tag: ":v17.09"
 galaxy_pull_policy: "IfNotPresent"
 galaxy_pvc: "galaxy-pvc"
 galaxy_create_pvc: true
