@@ -4,3 +4,4 @@ site\.retry
 kubespray*
 deployments
 up\.sh
+dockerfiles/container-galaxy-k8s-runtime-release-*
