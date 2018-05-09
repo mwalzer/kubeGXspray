@@ -102,6 +102,7 @@ kubectl delete configmaps db-connection
 kubectl delete pv glusterfs
 kubectl delete secret galaxy-postgres-secret
 ```
+(due to their pre-install hook nature)[https://github.com/kubernetes/helm/issues/960]
 ./reup_g.sh
 
 ### inspect init containers
