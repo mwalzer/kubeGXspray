@@ -1,0 +1,99 @@
+---
+- hosts: all 
+  
+  vars:
+     db_engine: "{{ lookup('env','GALAXY_SEC_DB_ENGINE') }}"
+     db_user_name: "{{ lookup('env','GALAXY_SEC_DB_USER') }}"
+     db_user_pass: "{{ lookup('env','GALAXY_SEC_DB_PASS') | replace('\n', '') }}"
+     db_host: "{{ lookup('env','GALAXY_SEC_DB_HOST') }}"
+     db_name: "{{ lookup('env','GALAXY_SEC_DB_NAME') }}"
+     google_analytics_code: "{{ lookup('env','GOOGLE_ANALYTICS_CODE') }}"
+     galaxy_admin_email: "{{ lookup('env','GALAXY_ADMIN_EMAIL') }}"
+     galaxy_api_key: "{{ lookup('env','GALAXY_API_KEY') }}"
+     galaxy_dir: "/galaxy"
+     target_dir_tools: "{{ lookup('env','TOOLS_DEST_PVC') }}"
+     default_dir_tools: "{{ galaxy_dir }}/tools"
+     smtp_setup:
+        smtp_server: "{{ lookup('env', 'GALAXY_SMTP_SERVER') }}"
+        smtp_username: "{{ lookup('env', 'GALAXY_SMTP_USERNAME') }}"
+        smtp_password: "{{ lookup('env', 'GALAXY_SMTP_PASSWORD') }}"
+        email_from: "{{ lookup('env', 'GALAXY_EMAIL_FROM') }}"
+        instance_resource_url: "{{ lookup('env', 'GALAXY_URL') }}"
+        smtp_ssl: "{{ lookup('env', 'GALAXY_SMTP_SSL') }}"
+     
+  tasks:
+  - name: set smtp access
+    ini_file:
+        dest: /galaxy/config/galaxy.ini
+        section: "app:main"
+        option: "{{ item.key }}"
+        value: "{{ item.value }}"
+    with_dict: "{{ smtp_setup }}"
+    when: smtp_setup.smtp_server != "" and smtp_setup.smtp_username != "" and smtp_setup.smtp_password != ""
+
+  - name: allow admin to delete users
+    ini_file:
+      dest: /galaxy/config/galaxy.ini
+      section: "app:main"
+      option: "allow_user_deletion"
+      value: "True"
+
+  - name: set database postgres connection properties 
+    ini_file:
+        dest: /galaxy/config/galaxy.ini
+        section: "app:main"
+        option: database_connection        
+        value: "{{ db_engine }}://{{ db_user_name}}:{{ db_user_pass }}@{{ db_host }}/{{ db_name }}"
+    when: db_engine != "" and db_user_name != "" and db_host != "" and db_name != ""
+
+  - name: set google analytics code 
+    ini_file:
+        dest: /galaxy/config/galaxy.ini
+        section: "app:main"
+        option: ga_code
+        value: "{{ google_analytics_code }}"
+    when: google_analytics_code != ""
+
+  - name: set admin email
+    ini_file:
+        dest: /galaxy/config/galaxy.ini
+        section: "app:main"
+        option: admin_users
+        value: "{{ galaxy_admin_email }}"
+    when: galaxy_admin_email != ""
+
+  - name: set master API key
+    ini_file:
+        dest: /galaxy/config/galaxy.ini
+        section: "app:main"
+        option: master_api_key
+        value: "{{ galaxy_api_key }}"
+    when: galaxy_api_key != ""
+
+  - name: create target dir for tools
+    file:
+       path: "{{ target_dir_tools }}"
+       state: directory
+       mode: 0755
+    when: target_dir_tools != ""
+
+  - name: delete exiting tools in tools specified location
+    shell: rm -rf {{ target_dir_tools }}/tools
+    when: target_dir_tools != ""
+
+  - name: copy tools to specified location, probably inside PVC.
+    shell: cp -r {{ default_dir_tools }} {{ target_dir_tools }}
+    when: target_dir_tools != ""
+
+  - name: change tools dir on ini file
+    ini_file:
+        dest: /galaxy/config/galaxy.ini
+        section: "app:main"
+        option: tool_path
+        value: "{{ target_dir_tools }}/tools"
+    when: target_dir_tools != ""
+
+
+
+
+

@@ -25,6 +25,7 @@ RUN sed -i 's/pulsar-galaxy-lib==0.8.0//' requirements.txt
 #RUN sed -i 's/pulsar-galaxy-lib==0.8.0/pulsar-galaxy-lib==0.8.3/' requirements.txt
 #seems to be unavailable
 #RUN pip install git+https://github.com/galaxyproject/pulsar.git@0.8.3
+#see also https://github.com/galaxyproject/pulsar/issues/152
 
 COPY config/galaxy.ini config/galaxy.ini
 COPY config/job_conf.xml config/job_conf.xml
@@ -32,15 +33,16 @@ COPY config/tool_conf.xml config/tool_conf.xml
 COPY config/sanitize_whitelist.txt config/sanitize_whitelist.txt
 COPY config/datatypes_conf.xml config/datatypes_conf.xml
 
-#COPY tools/phenomenal tools/phenomenal
-#COPY ansible ansible
-#COPY workflows workflows
-#RUN chmod u+x /galaxy/ansible/run_galaxy_config.sh
+COPY ansible ansible
+RUN mkdir workflows
+COPY container-simple-checks.sh container-simple-checks.sh
+RUN chmod u+x /galaxy/ansible/run_galaxy_config.sh
+
 # Missing XCMS datatypes for w4m
-#COPY external-datatypes/rdata_xcms_datatype.py /galaxy/lib/galaxy/datatypes/
-#COPY external-datatypes/rdata_camera_datatype.py /galaxy/lib/galaxy/datatypes/
-#COPY external-datatypes/no_unzip_datatypes.py /galaxy/lib/galaxy/datatypes/
-#COPY external-datatypes/nmrml_datatype.py /galaxy/lib/galaxy/datatypes/
+COPY external-datatypes/rdata_xcms_datatype.py /galaxy/lib/galaxy/datatypes/
+COPY external-datatypes/rdata_camera_datatype.py /galaxy/lib/galaxy/datatypes/
+COPY external-datatypes/no_unzip_datatypes.py /galaxy/lib/galaxy/datatypes/
+COPY external-datatypes/nmrml_datatype.py /galaxy/lib/galaxy/datatypes/
 
 RUN virtualenv .venv
 RUN /bin/bash -c "source .venv/bin/activate && \
