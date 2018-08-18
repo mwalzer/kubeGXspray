@@ -70,10 +70,10 @@ galaxy_metadata_name: "galaxy-k8s"
 galaxy_label_app: "galaxy-k8s"
 galaxy_internal_port: 8080
 galaxy_node_port_exposed: 30700
-galaxy_admin_email: ""
+galaxy_admin_email: "admin@ebi.ac.uk"
 galaxy_admin_username: "admin"
-galaxy_admin_password: ""
-galaxy_api_key: ""
+galaxy_admin_password: "123456"
+galaxy_api_key: "64fe1e39cb2a322272b9cc58091a835b"
 galaxy_tools_dest: "/opt/galaxy_data"
 galaxy_backend_postgres: false
 

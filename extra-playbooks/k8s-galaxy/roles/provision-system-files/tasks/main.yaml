@@ -16,7 +16,7 @@
   command: "{{ item }}"
   with_items:
     #- helm repo add galaxy-helm-repo https://pcm32.github.io/galaxy-helm-charts
-    - helm install /root/.helm/galaxy-chart --set galaxy_backend_postgres=true,cluster_dev=true,galaxy_create_pvc=true,galaxy_image_tag=":v17.09,objectstore_token={{objectstore_token | default('default_value') }}"
+    - helm install /root/.helm/galaxy-chart --set galaxy_backend_postgres=true,cluster_dev=true,galaxy_create_pvc=true,galaxy_image_tag=":v17.09",galaxy_api_key="64fe1e39cb2a322272b9cc58091a835b",objectstore_token={{objectstore_token | default('default_value') }}
     #- helm install /tmp/galaxy-chart --set galaxy_backend_postgres=true,cluster_dev=true,galaxy_create_pvc=true,galaxy_image_tag=":rc_v17.05-pheno_cv1.2.98"
     #- helm install --set cluster_dev=true,galaxy_create_pvc=false,galaxy_dev_config=galaxy-dev-config,galaxy_dev_tools=galaxy-dev-tools,galaxy_image_tag=":rc_v17.05-pheno_cv1.2.98" /tmp/galaxy-chart/galaxy-simple
     #helm install galaxy-helm-repo/galaxy --set galaxy_backend_postgres=true,galaxy_create_pvc=true,galaxy_pvc_capacity="29Gi"

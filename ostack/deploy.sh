@@ -25,6 +25,7 @@ echo Setting up Terraform creds && \
 #	-e url_suffix="xenial-server-cloudimg-amd64-disk1.img" \
 #	-e compress_suffix=""
 
+if [ -n ${K8S_MASTER_GX_PORT+x} ]; then echo "var is set"; fi
 
 export KARGO_TERRAFORM_FOLDER=$PORTAL_APP_REPO_FOLDER'/kubespray/contrib/terraform/openstack'
 
@@ -33,6 +34,8 @@ terraform apply --state=$PORTAL_DEPLOYMENTS_ROOT'/'$PORTAL_DEPLOYMENT_REFERENCE'
 
 cp contrib/terraform/terraform.py $PORTAL_DEPLOYMENTS_ROOT'/'$PORTAL_DEPLOYMENT_REFERENCE'/hosts'
 cp -r inventory/group_vars $PORTAL_DEPLOYMENTS_ROOT'/'$PORTAL_DEPLOYMENT_REFERENCE'/'
+
+sleep 10
 
 # Provision kubespray
 ansible-playbook --flush-cache -b --become-user=root -i $PORTAL_DEPLOYMENTS_ROOT'/'$PORTAL_DEPLOYMENT_REFERENCE'/hosts' cluster.yml \
@@ -56,7 +59,7 @@ ansible-playbook -b --become-user=root -i $PORTAL_DEPLOYMENTS_ROOT'/'$PORTAL_DEP
 	-e host_key_checking=false \
 	-e bootstrap_os=ubuntu
 
-# Set permissive access control
+# Set permissive access control and add '30700 open' security group
 ansible-playbook -b --become-user=root -i $PORTAL_DEPLOYMENTS_ROOT'/'$PORTAL_DEPLOYMENT_REFERENCE'/hosts' \
 	../extra-playbooks/rbac/rbac.yml \
 	--key-file "$PRIVATE_KEY"
